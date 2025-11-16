@@ -1,10 +1,13 @@
 import ujson
 import aioble
+import uasyncio as asyncio
+import bluetooth
+
 from config import save_config
 
-PAIR_UUID = UUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
-RX_UUID   = UUID("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
-TX_UUID   = UUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")  # optional feedback
+PAIR_UUID = bluetooth.UUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
+RX_UUID   = bluetooth.UUID("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
+TX_UUID   = bluetooth.UUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
 
 async def ble_pairing(config):
     print("Starting BLE pairing mode...")
