@@ -2,8 +2,8 @@ import uasyncio as asyncio
 from config import load_config
 from networking import connect_wifi, get_pico_mac
 from mqtt_client import connect_mqtt, publish
-from ble_pairing import ble_pairing
-from ble_scanner import scan_and_publish
+from pairing import ble_pairing
+from scanner import scan_and_publish
 
 async def main():
     config = load_config()
