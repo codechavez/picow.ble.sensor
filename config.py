@@ -1,22 +1,15 @@
-import ujson, os
+import ujson
+import os
 
 CONFIG_FILE = "config.json"
 
-DEFAULT_CONFIG = {
-    "wifi_ssid": None,
-    "wifi_password": None,
-    "mqtt_host": None,
-    "mqtt_port": 1883
-}
-
 def load_config():
-    if CONFIG_FILE not in os.listdir():
-        save_config(DEFAULT_CONFIG)
-        return DEFAULT_CONFIG
-    
-    with open(CONFIG_FILE, "r") as f:
-        return ujson.loads(f.read())
+    if CONFIG_FILE in os.listdir():
+        with open(CONFIG_FILE, "r") as f:
+            return ujson.load(f)
+    else:
+        return {}
 
-def save_config(cfg):
+def save_config(data):
     with open(CONFIG_FILE, "w") as f:
-        f.write(ujson.dumps(cfg))
+        ujson.dump(data, f)

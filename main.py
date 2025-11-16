@@ -1,35 +1,29 @@
 import uasyncio as asyncio
 from config import load_config
-from networking import connect_wifi
-from mqtt_client import mqtt_connect
-from ble_pairing import run_ble_pairing
-from ble_scanner import run_ble_scanner
-from networking import get_pico_mac
+from networking import connect_wifi, get_pico_mac
+from mqtt_client import connect_mqtt, publish
+from ble_pairing import ble_pairing
+from ble_scanner import scan_and_publish
 
 async def main():
-    cfg = load_config()
+    config = load_config()
 
-    # Pairing required?
-    if not cfg["wifi_ssid"] or not cfg["mqtt_host"]:
-        print("No config found → pairing mode")
-        await run_ble_pairing()
-        cfg = load_config()
+    # BLE pairing if credentials missing
+    if not config.get("wifi_ssid") or not config.get("wifi_password") or not config.get("mqtt_broker"):
+        await ble_pairing(config)
 
     # Connect Wi-Fi
-    if not connect_wifi(cfg["wifi_ssid"], cfg["wifi_password"]):
-        print("Wi-Fi failed → pairing again")
-        await run_ble_pairing()
-        cfg = load_config()
-        connect_wifi(cfg["wifi_ssid"], cfg["wifi_password"])
+    if not connect_wifi(config["wifi_ssid"], config["wifi_password"]):
+        print("Cannot continue without Wi-Fi")
+        return
 
     # Connect MQTT
-    mqtt_connect(
-        cfg["mqtt_host"],
-        cfg["mqtt_port"],
-        client_id=get_pico_mac().replace(":", "")
-    )
+    pico_mac = get_pico_mac()
+    if not connect_mqtt(pico_mac, config["mqtt_broker"], config.get("mqtt_port", 1883)):
+        print("MQTT not connected, continuing anyway")
 
-    print("System ready → Starting BLE scanner...")
-    await run_ble_scanner()
+    # Start BLE scanning
+    while True:
+        await scan_and_publish()
 
 asyncio.run(main())
