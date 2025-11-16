@@ -5,7 +5,7 @@ import asyncio
 from ble_pairing.pairing import run_ble_pairing
 from wifi.wifi_manager import wifi_connect, load_config
 from mqtt.mqtt_manager import mqtt_connect
-from ble_scanner.scanner import run_ble_scanner
+from scanner import run_ble_scanner
 
 
 async def main():
