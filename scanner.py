@@ -4,22 +4,36 @@ import aioble
 import time
 from mqtt_client import publish
 from networking import get_pico_mac
+from machine import Pin
+from config import load_config
+
+
+# LED pin
+led = Pin("LED", Pin.OUT)
+
+async def blink_led(duration=0.1):
+    led.on()
+    await asyncio.sleep(duration)
+    led.off()
 
 async def scan_and_publish():
+    config = load_config()
     pico_mac = get_pico_mac()
     while True:
         devices = await aioble.scan(5_000)  # scan 5 sec
         timestamp = time.time()
         for dev in devices:
+            print("Found device:", dev.addr.hex(), "RSSI:", dev.rssi)
             payload = ujson.dumps({
                 "sensor_mac": pico_mac,
                 "ble_mac": dev.addr.hex(),  # BLE MAC as string
                 "rssi": dev.rssi,
                 "timestamp": timestamp
             })
-            publish("ble/scans", payload)
+            publish(config["topic"], payload)
+            asyncio.create_task(blink_led())  
+            
         await asyncio.sleep(5)
-
 
 
 # {
