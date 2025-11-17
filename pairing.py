@@ -29,7 +29,7 @@ async def ble_pairing(config):
                             "wifi_password": password,
                             "mqtt_broker": broker,
                             "mqtt_port": port,
-                            "topic": "devices/rips/ble"
+                            "topic": "devices/ble/detection"
                         })
                         save_config(config)
                         print("Credentials saved!")

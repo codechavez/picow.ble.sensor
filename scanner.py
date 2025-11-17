@@ -7,7 +7,6 @@ from networking import get_pico_mac
 from machine import Pin
 from config import load_config
 
-
 # LED pin
 led = Pin("LED", Pin.OUT)
 
@@ -23,12 +22,14 @@ async def scan_and_publish():
         devices = await aioble.scan(5_000)  # scan 5 sec
         timestamp = time.time()
         for dev in devices:
-            print("Found device:", dev.addr.hex(), "RSSI:", dev.rssi)
+            ble_mac = ':'.join('{:02X}'.format(b) for b in dev.addr[::-1])
+            print("Found device:", ble_mac, "RSSI:", dev.rssi)
             payload = ujson.dumps({
-                "sensor_mac": pico_mac,
-                "ble_mac": dev.addr.hex(),  # BLE MAC as string
+                "sensor": pico_mac,
+                "device": ble_mac,
                 "rssi": dev.rssi,
-                "timestamp": timestamp
+                "timestamp": timestamp,
+                "advertisementType": dev.advertisement_type
             })
             publish(config["topic"], payload)
             asyncio.create_task(blink_led())  

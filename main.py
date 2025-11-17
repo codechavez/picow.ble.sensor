@@ -1,5 +1,4 @@
 import uasyncio as asyncio
-import bluetooth
 from config import load_config
 from networking import connect_wifi, get_pico_mac
 from mqtt_client import connect_mqtt, publish
