@@ -16,5 +16,6 @@ def connect_mqtt(client_id, broker, port=1883):
 def publish(topic, message):
     try:
         mqtt_client.publish(topic, message)
+        
     except Exception as e:
         print("MQTT publish failed:", e)

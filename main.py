@@ -1,9 +1,11 @@
+import time
+from scanner import BleScanner
 import uasyncio as asyncio
 from config import load_config
 from networking import connect_wifi, get_pico_mac
 from mqtt_client import connect_mqtt, publish
 from pairing import ble_pairing
-from scanner import scan_and_publish
+import bluetooth
 
 async def main():
     pico_mac = get_pico_mac()
@@ -27,7 +29,11 @@ async def main():
         return
 
     # Start BLE scanning
+    ble = bluetooth.BLE()
+    scanner = BleScanner(ble)
+    
     while True:
-        await scan_and_publish()
+        scanner.start_scan(5000)
+        time.sleep(30)
 
 asyncio.run(main())
