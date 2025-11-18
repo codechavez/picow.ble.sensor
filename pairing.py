@@ -14,6 +14,8 @@ TX_UUID   = UUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
 led = Pin("LED", Pin.OUT)
 PAIRING_TIMEPOUT = 180
 
+REQUIRED_FIELDS = ["wifi_ssid", "wifi_password", "mqtt_broker", "mqtt_port", "mqtt_topic"]
+
 # -------------------------------------------------------
 # LED BLINK PATTERNS
 # -------------------------------------------------------
@@ -87,24 +89,37 @@ async def ble_pairing(config):
     buffer = ""
     
     while True:
-        print("Waiting for RX write...")
-
-        # USE THE NEW EVENT API FOR RECEIVING WRITES
-        await rx_char.written()
-        raw = rx_char.read().decode()
-        print("Received:", raw)
-        
         try:
-            new_cfg = ujson.loads(raw)
+            await rx_char.written()
+            chunk = rx_char.read()
+            if not chunk:
+                continue
+            
+            print("Chunk received:", chunk)
+            buffer += chunk.decode()
+            
+            try:
+                data = ujson.loads(buffer)
+                print("Data received:", data)
+            except ValueError:
+                continue
+            
+            # Validate required fields
+            missing = [k for k in REQUIRED_FIELDS if k not in data or not data[k]]
+            if missing:
+                print("Missing fields:", missing)
+                tx_char.write(b"ERR: Missing required fields")
+                continue 
+            
+            # SAVE YOUR CONFIG HERE
+            save_config(data)
+            print("Configuration saved, restarting...")
+            tx_char.write(b"OK")
+            flash_task.cancel()
+            time.sleep(1)
+            reset()
+            
         except Exception as e:
-            print("Invalid JSON:", e)
-            continue
-
-        save_config(new_cfg)
-        print("Saved!")
-
-        tx_char.write(b"OK")
-        await tx_char.notify(connection)
-
-        flash_task.cancel()
-        reset()
+            flash_task.cancel()
+            time.sleep(1)
+            reset()

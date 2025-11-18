@@ -13,7 +13,8 @@ def connect_wifi(ssid, password):
     wlan.connect(ssid, password)
     for _ in range(20):
         if wlan.isconnected():
-            print("Connected to Wi-Fi")
+            ip, subnet, gateway, dns = wlan.ifconfig()
+            print(f"Connected to Wi-Fi with IP Address: {ip}")
             return True
         time.sleep(1)
     print("Wi-Fi connection failed")

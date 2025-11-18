@@ -7,7 +7,6 @@ from networking import get_pico_mac
 from machine import Pin
 from config import load_config
 
-# LED pin
 led = Pin("LED", Pin.OUT)
 
 async def blink_led(duration=0.1):
@@ -18,7 +17,10 @@ async def blink_led(duration=0.1):
 async def scan_and_publish():
     config = load_config()
     pico_mac = get_pico_mac()
+    
     while True:
+        print("Scanning for BLE devices...")
+        
         devices = await aioble.scan(5_000)  # scan 5 sec
         timestamp = time.time()
         for dev in devices:
