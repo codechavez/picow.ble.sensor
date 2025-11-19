@@ -53,7 +53,7 @@ async def handle_rx(rx_char):
 # -------------------------------------------------------
 # BLE PAIRING LOGIC
 # -------------------------------------------------------
-async def ble_pairing(config):
+async def pairing_mode(config):
     print("Starting BLE pairing mode...")
 
     pairing_task = asyncio.create_task(led_pairing_pattern())
