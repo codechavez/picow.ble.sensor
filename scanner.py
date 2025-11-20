@@ -4,20 +4,20 @@ import aioble
 import bluetooth
 import time
 from datetime import datetime
-from networking import get_pico_mac
 from machine import Pin
-from config import load_config
+from configuration import load_config
 
 _IRQ_SCAN_RESULT = const(5)
 CONFIGS = load_config()
 led = Pin("LED", Pin.OUT)
     
 class BleScanner:
-    def __init__(self, ble, mqtt):
+    def __init__(self, ble, mqtt, mac_address):
         self._ble = ble
         self._ble.active(True)
         self._ble.irq(self._irq)
         self._mqtt = mqtt
+        self._mac_address = mac_address
 
     def _irq(self, event, data):
         if event == _IRQ_SCAN_RESULT:
@@ -39,7 +39,7 @@ class BleScanner:
         
         now_utc = time.time() 
         payload = ujson.dumps({
-                "sensor": get_pico_mac(),
+                "sensor": self._mac_address,
                 "device": mac,
                 "rssi": rssi,
                 "timestamp": now_utc,

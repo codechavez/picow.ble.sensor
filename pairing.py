@@ -4,8 +4,7 @@ import ujson
 import uasyncio as asyncio
 from machine import Pin, reset
 from bluetooth import UUID
-from config import save_config
-from networking import get_pico_mac
+from configuration import save_config
 
 PAIR_UUID = UUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
 RX_UUID   = UUID("6E400002-B5A3-F393-E0A9-E50E24DCCA9E")
@@ -53,7 +52,7 @@ async def handle_rx(rx_char):
 # -------------------------------------------------------
 # BLE PAIRING LOGIC
 # -------------------------------------------------------
-async def pairing_mode(config):
+async def pairing_mode(config, mac_address):
     print("Starting BLE pairing mode...")
 
     pairing_task = asyncio.create_task(led_pairing_pattern())
@@ -76,7 +75,7 @@ async def pairing_mode(config):
     connection = await asyncio.wait_for(
         aioble.advertise(
             interval_us=20000,
-            name=f"PicoW {get_pico_mac()}",
+            name=f"PicoW {mac_address}",
             services=[PAIR_UUID]
         ),
         timeout=180
