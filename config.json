@@ -1,0 +1,1 @@
+{"wifi_ssid": "", "mqtt_port": 30183, "mqtt_topic": "devices/ble/detections", "mqtt_broker": "192.168.2.74", "wifi_password": ""}
