@@ -13,7 +13,7 @@ TX_UUID   = UUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E")
 led = Pin("LED", Pin.OUT)
 PAIRING_TIMEPOUT = 180
 
-REQUIRED_FIELDS = ["wifi_ssid", "wifi_password", "mqtt_broker", "mqtt_port", "mqtt_topic"]
+REQUIRED_FIELDS = ["wifi_ssid", "wifi_password", "mqtt_broker", "mqtt_port", "mqtt_topic", "building_id", "floorplan_id", "space_id"]
 
 # -------------------------------------------------------
 # LED BLINK PATTERNS

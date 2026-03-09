@@ -39,11 +39,13 @@ class BleScanner:
         
         now_utc = time.time() 
         payload = ujson.dumps({
-                "sensor": self._mac_address,
-                "device": mac,
+                "m": self._mac_address,
+                "d": mac,
                 "rssi": rssi,
-                "timestamp": now_utc,
-                "advertisementType": adv_type,
+                "t": now_utc,
+                "bid": CONFIGS.get("building_id"),
+                "fid": CONFIGS.get("floorplan_id"),
+                "sid": CONFIGS.get("space_id"),
                 "dataPayload": adv_data.hex() if adv_data else None,
             })
         
