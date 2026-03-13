@@ -6,5 +6,9 @@
     "wifi_password": "",
     "building_id": "",
     "floorplan_id": "",
-    "space_id": ""
+    "space_id": "",
+    "anchor": {
+        "lon": 0.0,
+        "lat": 0.0
+    }
 }
