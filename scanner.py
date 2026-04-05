@@ -28,7 +28,7 @@ class BleScanner:
                 self.dispatch_detection(addr_type, addr, rssi, adv_type, adv_data)
 
     def start_scan(self, duration_ms=5000):
-        self._ble.gap_scan(0, duration_ms, 2000)
+        self._ble.gap_scan(duration_ms, 1280000 ,2000)
 
     def stop_scan(self):
         self._ble.gap_scan(None)
@@ -46,7 +46,6 @@ class BleScanner:
                 "bid": CONFIGS.get("building_id"),
                 "fid": CONFIGS.get("floorplan_id"),
                 "sid": CONFIGS.get("space_id"),
-                "dataPayload": adv_data.hex() if adv_data else None,
             })
         
         led.on()

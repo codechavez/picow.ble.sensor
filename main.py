@@ -60,7 +60,7 @@ async def main():
         print("Starting BLE Scan...")
         while True:
             scanner.start_scan()
-            time.sleep(2)
+            time.sleep(1)
             
     except Exception as e:
         print("Error in main:", e)
