@@ -39,7 +39,7 @@ class BleScanner:
         
         now_utc = time.time() 
         payload = ujson.dumps({
-                "m": self._mac_address,
+                "ant": self._mac_address,
                 "d": mac,
                 "rssi": rssi,
                 "t": now_utc,
