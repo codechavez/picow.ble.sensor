@@ -1,1 +1,0 @@
-{"floorplan_id": "e4a82052-7256-4f51-a467-33f2512c7a69", "sequence": 1609459225000, "wifi_ssid": "DevOfMe", "mqtt_topic": "devices/ble/detections", "space_id": "18ce553b-943e-4e1b-bb15-27eef257ea01", "building_id": "30cad40a-cad4-4604-bd6c-5d03bf179260", "wifi_password": "", "mqtt_port": 30183, "mqtt_broker": "192.168.50.143"}
