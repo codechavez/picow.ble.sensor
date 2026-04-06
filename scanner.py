@@ -46,6 +46,7 @@ class BleScanner:
                 "bid": CONFIGS.get("building_id"),
                 "fid": CONFIGS.get("floorplan_id"),
                 "sid": CONFIGS.get("space_id"),
+                "seq": int(CONFIGS.get("sequence"))
             })
         
         led.on()

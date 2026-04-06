@@ -110,10 +110,10 @@ async def pairing_mode(config, mac_address):
                 tx_char.write(b"ERR: Missing required fields")
                 continue 
             
-            # SAVE YOUR CONFIG HERE
             save_config(data)
             print("Configuration saved, restarting...")
             tx_char.write(b"OK")
+            
             flash_task.cancel()
             time.sleep(1)
             reset()

@@ -12,8 +12,9 @@ from umqtt.simple import MQTTClient
 
 def sync_time():
     try:
-        ntptime.settime() 
-        print(f"Time synced: {time.localtime()}")
+        ntptime.host = "us.pool.ntp.org" # or hostname if DNS works
+        ntptime.settime()
+        print(time.localtime())        
     except Exception as e:
         print("NTP failed:", e)
 
@@ -37,7 +38,7 @@ async def main():
         config = load_config()
         pico_mac = WifiService.get_pico_mac()
         print(f'Pico MAC Address: {pico_mac}')
-        
+                
         if not config.get("wifi_ssid") or not config.get("wifi_password") or not config.get("mqtt_broker") or not config.get("mqtt_port"):
             await pairing_mode(config, pico_mac)
             
